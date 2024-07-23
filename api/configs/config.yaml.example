@@ -1,0 +1,2 @@
+gin:
+  mode: "debug"  # For production release, change this to release
