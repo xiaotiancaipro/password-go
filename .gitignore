@@ -161,5 +161,6 @@ cython_debug/
 .idea/
 
 
-# npm
+# node
+node_modules/
 package-lock.json
