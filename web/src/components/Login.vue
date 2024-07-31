@@ -1,6 +1,17 @@
+<template>
+  <div class="main-wrap">
+    <form method="post" class="login-form">
+      <h1 class="login-title">用户登陆</h1>
+      <input class="username" type="text" name="username" placeholder="账号" autocomplete="off" v-model="username"/>
+      <input class="password" type="password" name="password" placeholder="密码" v-model="password"/>
+      <input class="input-button" type="button" value="登 陆" @click="login" @keyup.enter="login"/>
+    </form>
+  </div>
+</template>
+
 <script setup lang="ts">
 
-import {ref, onMounted, onUnmounted} from 'vue';
+import {onMounted, onUnmounted, ref} from 'vue';
 import router from "@/router";
 
 const username = ref("");
@@ -8,30 +19,30 @@ const password = ref("");
 const isLoggedIn = ref(false);
 
 const getUsername = () => {
-  return "root"
-}
+  return "root";
+};
 
 const getPassword = () => {
-  return "root"
-}
+  return "root";
+};
 
 const setLoggedIn = (flag: boolean) => {
-  isLoggedIn.value = flag
-}
+  isLoggedIn.value = flag;
+};
 
 const login = () => {
   if (username.value === getUsername() && password.value === getPassword()) {
     localStorage.setItem("username", getUsername());
     localStorage.setItem("password", getPassword());
     setLoggedIn(true);
-    router.replace("/home")
+    router.replace("/home");
   } else {
     alert("登录失败, 请正确输入账号和密码!");
   }
 };
 
-const keyDown = (e) => {
-  if (e.keyCode === 13 || e.keyCode === 100) {
+const keyDown = (e: KeyboardEvent): void => {
+  if (e.key === "Enter") {
     login();
   }
 };
@@ -46,17 +57,6 @@ onUnmounted(() => {
 
 </script>
 
-<template>
-  <div class="main-wrap">
-    <form method="post" class="login-form">
-      <h1 class="login-title">用户登陆</h1>
-      <input class="username" type="text" name="username" placeholder="账号" autocomplete="off" v-model="username"/>
-      <input class="password" type="password" name="password" placeholder="密码" v-model="password"/>
-      <input class="input-button" type="button" value="登 陆" @click="login" @keyup.enter="keyDown"/>
-    </form>
-  </div>
-</template>
-
 <style scoped>
 
 .main-wrap {
@@ -65,7 +65,7 @@ onUnmounted(() => {
   height: 100%;
   left: 0;
   top: 0;
-  background: linear-gradient(45deg, #facff1, #6db9db);
+  background: linear-gradient(45deg, #bedbe8, #d6e6ef);
 }
 
 .login-form {
@@ -83,7 +83,7 @@ onUnmounted(() => {
 .login-title {
   line-height: 240%;
   text-align: center;
-  background: linear-gradient(90deg, rgba(246, 60, 47, 0.6), rgba(128, 58, 242, 0.6));
+  background: #d6e6ef;
   color: #fff;
   font-size: 20px;
 }
