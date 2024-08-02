@@ -1,7 +1,7 @@
 <template>
   <div class="main-wrap">
     <form method="post" class="login-form">
-      <h1 class="login-title">用户登陆</h1>
+      <h1 class="login-title">PASSWORD-GO</h1>
       <input class="username" type="text" name="username" placeholder="账号" autocomplete="off" v-model="username"/>
       <input class="password" type="password" name="password" placeholder="密码" v-model="password"/>
       <input class="input-button" type="button" value="登 陆" @click="login" @keyup.enter="login"/>
@@ -65,15 +65,14 @@ onUnmounted(() => {
   height: 100%;
   left: 0;
   top: 0;
-  background: linear-gradient(45deg, #bedbe8, #d6e6ef);
+  background: #FFFFFF;
 }
 
 .login-form {
   width: 400px;
   height: 300px;
-  background: #fff;
   position: absolute;
-  top: 40%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   overflow: hidden;
@@ -83,8 +82,7 @@ onUnmounted(() => {
 .login-title {
   line-height: 240%;
   text-align: center;
-  background: #d6e6ef;
-  color: #fff;
+  color: #000000;
   font-size: 20px;
 }
 
@@ -127,8 +125,8 @@ onUnmounted(() => {
   height: 35px;
   border: 0;
   border-radius: 4px;
-  background: rgba(247, 60, 45, 0.6);
-  color: #fff;
+  background: #409575;
+  color: #ffffff;
   cursor: pointer;
 }
 
