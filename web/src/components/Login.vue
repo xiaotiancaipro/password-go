@@ -1,11 +1,11 @@
 <template>
   <div class="main-wrap">
-    <form method="post" class="login-form">
-      <h1 class="login-title">PASSWORD-GO</h1>
-      <input class="username" type="text" name="username" placeholder="账号" autocomplete="off" v-model="username"/>
-      <input class="password" type="password" name="password" placeholder="密码" v-model="password"/>
-      <input class="input-button" type="button" value="登 陆" @click="login" @keyup.enter="login"/>
-    </form>
+    <el-form class="login-form" label-width="auto">
+      <el-text class="login-title">PASSWORD-GO</el-text>
+      <el-input class="username" v-model="username" placeholder="Username"/>
+      <el-input class="password" v-model="password" type="password" show-password placeholder="Password"/>
+      <el-button class="input-button" color="#409575" @click="login">Login</el-button>
+    </el-form>
   </div>
 </template>
 
@@ -13,6 +13,7 @@
 
 import {onMounted, onUnmounted, ref} from 'vue';
 import router from "@/router";
+import {ElMessage} from 'element-plus'
 
 const username = ref("");
 const password = ref("");
@@ -36,15 +37,20 @@ const login = () => {
     localStorage.setItem("password", getPassword());
     setLoggedIn(true);
     router.replace("/home");
+    ElMessage({
+      message: "Login successful",
+      type: "success",
+    })
   } else {
-    alert("登录失败, 请正确输入账号和密码!");
+    ElMessage({
+      message: "Login failed, please enter your account and password correctly!",
+      type: "error",
+    });
   }
 };
 
 const keyDown = (e: KeyboardEvent): void => {
-  if (e.key === "Enter") {
-    login();
-  }
+  if (e.key === "Enter") login();
 };
 
 onMounted(() => {
@@ -69,21 +75,22 @@ onUnmounted(() => {
 }
 
 .login-form {
-  width: 400px;
-  height: 300px;
+  width: 25rem;
+  height: 18.75rem;
   position: absolute;
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   overflow: hidden;
-  border-radius: 6px;
 }
 
 .login-title {
+  position: absolute;
+  top: 15%;
+  left: 48%;
+  transform: translate(-50%, -50%);
   line-height: 240%;
-  text-align: center;
-  color: #000000;
-  font-size: 20px;
+  font-size: 1.25rem;
 }
 
 .username {
@@ -91,13 +98,9 @@ onUnmounted(() => {
   top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: block;
-  width: 300px;
-  height: 35px;
-  border: 1px solid #d0d0d0;
-  border-radius: 4px;
-  outline: none;
-  text-indent: 10px;
+  width: 18.75rem;
+  height: 2.1875rem;
+  border-radius: 0.25rem;
 }
 
 .password {
@@ -105,13 +108,9 @@ onUnmounted(() => {
   top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: block;
-  width: 300px;
-  height: 35px;
-  border: 1px solid #d0d0d0;
-  border-radius: 4px;
-  outline: none;
-  text-indent: 10px;
+  width: 18.75rem;
+  height: 2.1875rem;
+  border-radius: 0.25rem;
 }
 
 .input-button {
@@ -119,15 +118,10 @@ onUnmounted(() => {
   top: 70%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: block;
   margin: 5% auto 0;
-  width: 300px;
-  height: 35px;
-  border: 0;
-  border-radius: 4px;
-  background: #409575;
-  color: #ffffff;
-  cursor: pointer;
+  width: 18.75rem;
+  height: 2.1875rem;
+  border-radius: 0.25rem;
 }
 
 </style>
