@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"password-go/configs"
-	"password-go/routers"
 )
 
 func InitConfig() {
@@ -14,13 +13,10 @@ func InitConfig() {
 	}
 }
 
-func InitRouter(r *gin.Engine) {
-	routers.TestRouter(r)
-}
-
 func CreateApp() *gin.Engine {
 	app_ := gin.Default()
-	InitRouter(app_)
+	configs.InitDB()
+	configs.InitRouter(app_)
 	return app_
 }
 

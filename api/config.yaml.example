@@ -1,0 +1,8 @@
+gin:
+  mode: "debug"  # For production release, change this to release
+database:
+  host: "localhost"
+  port: 5432
+  username: "postgres"
+  password: "password_go"
+  db: "password_go"
