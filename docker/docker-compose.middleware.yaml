@@ -1,27 +1,20 @@
 services:
-  # The postgres database.
   db:
     image: postgres:15-alpine
     restart: always
-    env_file:
-      - ./middleware.env
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password_go}
-      POSTGRES_DB: ${POSTGRES_DB:-password_go}
-      PGDATA: ${PGDATA:-/var/lib/postgresql/data/pgdata}
+      POSTGRES_PASSWORD: password_go
+      POSTGRES_DB: password_go
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - ./volumes/db/data:/var/lib/postgresql/data
     ports:
-      - "${EXPOSE_POSTGRES_PORT:-5432}:5432"
-
-  # The redis cache.
+      - "5432:5432"
   redis:
     image: redis:6-alpine
     restart: always
     volumes:
-      # Mount the redis data directory to the container.
       - ./volumes/redis/data:/data
-    # Set the redis password when startup redis server.
     command: redis-server --requirepass password_go
     ports:
-      - "${EXPOSE_REDIS_PORT:-6379}:6379"
+      - "6379:6379"

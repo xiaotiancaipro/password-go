@@ -1,0 +1,52 @@
+package controllers
+
+import (
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+	"password-go/models"
+)
+
+type UserController struct{}
+
+func (u UserController) CheckUser(c *gin.Context, db *gorm.DB) {
+
+	type input struct {
+		Email    string
+		Password string
+	}
+
+	type output struct {
+		Exists int
+		Login  int
+	}
+
+	if userService.IsTableEmpty(db) {
+		message := "the table [user] is empty"
+		response.Success(c, message, output{0, 0})
+		return
+	}
+
+	userInput := input{}
+	if err := c.ShouldBindJSON(&userInput); err != nil {
+		message := "invalid input"
+		response.Error(c, message)
+		return
+	}
+
+	var userDB models.User
+	if err := db.Where("email = ?", userInput.Email).First(&userDB).Error; err != nil {
+		message := fmt.Sprintf("this user [%s] is not exists", userInput.Email)
+		response.Success(c, message, output{0, 0})
+		return
+	}
+
+	if userInput.Password != userDB.Password {
+		message := fmt.Sprintf("the user [%s] entered an incorrect password", userInput.Email)
+		response.Success(c, message, output{1, 0})
+		return
+	}
+
+	response.Success(c, "login successful", output{1, 1})
+
+}

@@ -7,11 +7,11 @@ import (
 
 type ResponseUtil struct{}
 
-func (responseUtil ResponseUtil) Build(c *gin.Context, code int, message string, data map[string]any) {
+func (responseUtil ResponseUtil) Build(c *gin.Context, code int, message string, data any) {
 	c.JSON(code, gin.H{"code": code, "message": message, "data": data})
 }
 
-func (responseUtil ResponseUtil) Success(c *gin.Context, message string, data map[string]any) {
+func (responseUtil ResponseUtil) Success(c *gin.Context, message string, data any) {
 	responseUtil.Build(c, http.StatusOK, "Success: "+message, data) // 200
 }
 
