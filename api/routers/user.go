@@ -11,5 +11,6 @@ func UserRouter(r *gin.Engine, db *gorm.DB) {
 	user := r.Group("/user")
 	{
 		user.POST("check", func(c *gin.Context) { userController.CheckUser(c, db) })
+		user.POST("create", func(c *gin.Context) { userController.CreateUser(c, db) })
 	}
 }
