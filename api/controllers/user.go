@@ -60,6 +60,8 @@ func (u UserController) CheckUser(c *gin.Context, db *gorm.DB) {
 
 func (u UserController) CreateUser(c *gin.Context, db *gorm.DB) {
 
+	// input -> models.User{}
+
 	type output struct {
 		// 1: The user create successfully
 		// -1: Email or Password is empty
