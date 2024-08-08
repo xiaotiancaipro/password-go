@@ -17,9 +17,9 @@ func migrateDatabase(db *gorm.DB) {
 	for name, table := range tables {
 		err := db.AutoMigrate(&table)
 		if err != nil {
-			log.Error("Failed to migrate table %s: %v", name, err)
+			log.Error(fmt.Sprintf("Failed to migrate table %s: %v", name, err))
 		}
-		log.Info("Table %s migration successful", name)
+		log.Info(fmt.Sprintf("Table %s migration successful", name))
 	}
 
 }
@@ -35,7 +35,7 @@ func InitDB(config configs.ConfigYaml) *gorm.DB {
 	)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Error("Failed to connect database: %v", err)
+		log.Error(fmt.Sprintf("Failed to connect database: %v", err))
 	}
 	migrateDatabase(db)
 	return db

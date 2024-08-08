@@ -23,6 +23,7 @@ func (u UserController) CheckUser(c *gin.Context, db *gorm.DB) {
 
 	if userService.IsTableEmpty(db) {
 		message := "the table [user] is empty"
+		log.Info(message)
 		response.Success(c, message, output{0, 0})
 		return
 	}
@@ -30,6 +31,7 @@ func (u UserController) CheckUser(c *gin.Context, db *gorm.DB) {
 	userInput := input{}
 	if err := c.ShouldBindJSON(&userInput); err != nil {
 		message := "invalid input"
+		log.Error(message)
 		response.Error(c, message)
 		return
 	}
@@ -37,16 +39,20 @@ func (u UserController) CheckUser(c *gin.Context, db *gorm.DB) {
 	var userDB models.User
 	if err := db.Where("email = ?", userInput.Email).First(&userDB).Error; err != nil {
 		message := fmt.Sprintf("this user [%s] is not exists", userInput.Email)
+		log.Info(message)
 		response.Success(c, message, output{0, 0})
 		return
 	}
 
 	if userInput.Password != userDB.Password {
 		message := fmt.Sprintf("the user [%s] entered an incorrect password", userInput.Email)
+		log.Info(message)
 		response.Success(c, message, output{1, 0})
 		return
 	}
 
-	response.Success(c, "login successful", output{1, 1})
+	message := "login successful"
+	log.Info(message)
+	response.Success(c, message, output{1, 1})
 
 }
