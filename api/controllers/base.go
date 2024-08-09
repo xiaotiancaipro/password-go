@@ -5,6 +5,8 @@ import (
 	"password-go/utils"
 )
 
+var userOperate = models.UserOperate{}
+
 var log = utils.LoggerUtil{}.Logger()
 var response = utils.ResponseUtil{}
-var userOperate = models.UserOperate{}
+var stringUtil = utils.StringUtil{}

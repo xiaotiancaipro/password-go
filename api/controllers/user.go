@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"password-go/models"
-	"password-go/utils"
 )
 
 type UserController struct{}
@@ -86,7 +85,7 @@ func (u UserController) CreateUser(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	if !utils.IsEmailValid(userInput.Email) {
+	if !stringUtil.IsEmailValid(userInput.Email) {
 		message := fmt.Sprintf("The email [%s] is not valid", userInput.Email)
 		log.Info(message)
 		response.Success(c, message, output{-2})

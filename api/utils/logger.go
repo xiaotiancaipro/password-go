@@ -8,6 +8,7 @@ import (
 )
 
 type LoggerUtil struct{}
+
 type Formatter struct {
 	logrus.TextFormatter
 }
@@ -23,7 +24,7 @@ func (f *Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	return []byte(fmt.Sprintf(format, time, level, file, entry.Message)), nil
 }
 
-func (loggerUtil LoggerUtil) Logger() *logrus.Logger {
+func (l LoggerUtil) Logger() *logrus.Logger {
 	log := logrus.New()
 	log.SetFormatter(new(Formatter))
 	log.SetReportCaller(true)

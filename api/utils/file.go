@@ -7,9 +7,7 @@ import (
 
 type FileUtil struct{}
 
-var log = LoggerUtil{}.Logger()
-
-func (fileUtil FileUtil) ReadFile(file string) []byte {
+func (f FileUtil) ReadFile(file string) []byte {
 	configFile, err := os.Open(file)
 	if err != nil {
 		log.Error("Error opening config file: %v\n", err)
