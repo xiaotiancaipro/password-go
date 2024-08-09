@@ -1,18 +1,16 @@
-package models
+package extensions
 
 import (
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"password-go/configs"
-	"password-go/utils"
+	"password-go/models"
 )
-
-var log = utils.LoggerUtil{}.Logger()
 
 func migrateDatabase(db *gorm.DB) {
 	tables := map[string]any{
-		"user": User{},
+		"user": models.User{},
 	}
 	for name, table := range tables {
 		err := db.AutoMigrate(&table)
