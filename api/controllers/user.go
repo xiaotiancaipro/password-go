@@ -9,7 +9,7 @@ import (
 
 type UserController struct{}
 
-func (u UserController) CheckUser(c *gin.Context, db *gorm.DB) {
+func (u UserController) Login(c *gin.Context, db *gorm.DB) {
 
 	type input struct {
 		Email    string
@@ -59,14 +59,14 @@ func (u UserController) CheckUser(c *gin.Context, db *gorm.DB) {
 
 func (u UserController) CreateUser(c *gin.Context, db *gorm.DB) {
 
-	// input -> models.User{}
+	// input : models.User{}
 
 	type output struct {
-		// 1: The user create successfully
-		// -1: Email or Password is empty
-		// -2: The email is invalid
-		// -3: This user is already exists
-		// -4: Retry, because the user create failed
+		//  1 : The user create successfully
+		// -1 : Email or Password is empty
+		// -2 : The email is invalid
+		// -3 : This user is already exists
+		// -4 : Retry, because the user create failed
 		Status int
 	}
 
