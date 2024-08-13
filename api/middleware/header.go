@@ -18,7 +18,7 @@ func getIgnoreAuthPathMap() (pathMap map[string]types.Nil) {
 	return
 }
 
-func InitAuth(config configs.ConfigYaml) gin.HandlerFunc {
+func InitAuth(config configs.ConfigYaml) func(*gin.Context) {
 	return func(c *gin.Context) {
 		if _, exists := getIgnoreAuthPathMap()[c.Request.URL.Path]; exists {
 			c.Next()

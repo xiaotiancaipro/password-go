@@ -11,7 +11,7 @@ import (
 var log = utils.LoggerUtil{}.Logger()
 var response = utils.ResponseUtil{}
 
-func useDB(customController func(c *gin.Context, db *gorm.DB)) func(c *gin.Context) {
+func useDB(customController func(*gin.Context, *gorm.DB)) func(*gin.Context) {
 	return func(c *gin.Context) {
 		db, err := middleware.GetDB(c)
 		if err != nil {

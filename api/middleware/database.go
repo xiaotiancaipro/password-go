@@ -23,7 +23,7 @@ func migrateDatabase(db *gorm.DB) {
 	}
 }
 
-func InitDB(config configs.ConfigYaml) gin.HandlerFunc {
+func InitDB(config configs.ConfigYaml) func(*gin.Context) {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		config.Database.Host,
