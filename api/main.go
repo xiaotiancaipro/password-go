@@ -7,29 +7,16 @@ import (
 	"password-go/routers"
 )
 
-func InitConfig() configs.ConfigYaml {
-	config := configs.Config()
-	gin.SetMode(gin.ReleaseMode)
-	if config.Gin.Mode == "debug" {
-		gin.SetMode(gin.DebugMode)
-	}
-	return config
-}
-
-func InitRouter(r *gin.Engine) {
-	routers.UserRouter(r)
-}
-
-func CreateApp() *gin.Engine {
+func CreateApp(config configs.ConfigYaml) *gin.Engine {
 	app := gin.Default()
-	config := InitConfig()
 	app.Use(middleware.InitAuth(config))
 	app.Use(middleware.InitDB(config))
-	InitRouter(app)
+	routers.InitRouter(app)
 	return app
 }
 
 func main() {
-	app := CreateApp()
+	config := configs.InitConfig()
+	app := CreateApp(config)
 	app.Run(":6001")
 }
