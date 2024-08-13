@@ -1,5 +1,6 @@
+secret_key: "SECRET-KEY"
 gin:
-  mode: "debug"  # For production release, change this to release
+  mode: "release"  # For production release, change this to release
 database:
   host: "localhost"
   port: 5432
