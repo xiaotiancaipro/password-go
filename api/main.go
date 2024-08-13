@@ -2,9 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"password-go/configs"
-	"password-go/extensions"
+	"password-go/middleware"
 	"password-go/routers"
 )
 
@@ -17,19 +16,20 @@ func InitConfig() configs.ConfigYaml {
 	return config
 }
 
-func InitRouter(r *gin.Engine, db *gorm.DB) {
-	routers.UserRouter(r, db)
+func InitRouter(r *gin.Engine) {
+	routers.UserRouter(r)
 }
 
-func CreateApp(config configs.ConfigYaml) *gin.Engine {
+func CreateApp() *gin.Engine {
 	app := gin.Default()
-	db := extensions.InitDB(config)
-	InitRouter(app, db)
+	config := InitConfig()
+	app.Use(middleware.InitAuth(config))
+	app.Use(middleware.InitDB(config))
+	InitRouter(app)
 	return app
 }
 
 func main() {
-	config := InitConfig()
-	app := CreateApp(config)
+	app := CreateApp()
 	app.Run(":6001")
 }

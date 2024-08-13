@@ -3,13 +3,13 @@ package controllers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
+	"password-go/middleware"
 	"password-go/models"
 )
 
 type UserController struct{}
 
-func (u UserController) Login(c *gin.Context, db *gorm.DB) {
+func (u UserController) Login(c *gin.Context) {
 
 	type input struct {
 		Email    string
@@ -19,6 +19,13 @@ func (u UserController) Login(c *gin.Context, db *gorm.DB) {
 	type output struct {
 		Exists int
 		Login  int
+	}
+
+	db, err := middleware.GetDB(c)
+	if err != nil {
+		log.Error(err)
+		response.Error(c, fmt.Sprintf("%v", err))
+		return
 	}
 
 	if userOperate.IsTableEmpty(db) {
@@ -57,7 +64,7 @@ func (u UserController) Login(c *gin.Context, db *gorm.DB) {
 
 }
 
-func (u UserController) CreateUser(c *gin.Context, db *gorm.DB) {
+func (u UserController) CreateUser(c *gin.Context) {
 
 	// input : models.User{}
 
@@ -68,6 +75,13 @@ func (u UserController) CreateUser(c *gin.Context, db *gorm.DB) {
 		// -3 : This user is already exists
 		// -4 : Retry, because the user create failed
 		Status int
+	}
+
+	db, err := middleware.GetDB(c)
+	if err != nil {
+		log.Error(err)
+		response.Error(c, fmt.Sprintf("%v", err))
+		return
 	}
 
 	userInput := models.User{}

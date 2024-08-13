@@ -1,7 +1,8 @@
-package extensions
+package middleware
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"password-go/configs"
@@ -20,10 +21,9 @@ func migrateDatabase(db *gorm.DB) {
 		}
 		log.Info(fmt.Sprintf("Table [%s] migration successful", name))
 	}
-
 }
 
-func InitDB(config configs.ConfigYaml) *gorm.DB {
+func InitDB(config configs.ConfigYaml) gin.HandlerFunc {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		config.Database.Host,
@@ -38,5 +38,23 @@ func InitDB(config configs.ConfigYaml) *gorm.DB {
 		return nil
 	}
 	migrateDatabase(db)
-	return db
+	return func(c *gin.Context) {
+		c.Set("db", db)
+		c.Next()
+	}
+}
+
+func GetDB(c *gin.Context) (db *gorm.DB, err any) {
+	cdb, exists := c.Get("db")
+	if !exists {
+		db, err = nil, "Failed to get db context"
+		return
+	}
+	gdb, ok := cdb.(*gorm.DB)
+	if !ok {
+		db, err = nil, "Type assertion failed"
+		return
+	}
+	db, err = gdb, nil
+	return
 }

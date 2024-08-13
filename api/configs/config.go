@@ -8,7 +8,8 @@ import (
 )
 
 type ConfigYaml struct {
-	Gin struct {
+	SecretKey string `yaml:"secret_key"`
+	Gin       struct {
 		Mode string `yaml:"mode"`
 	} `yaml:"gin"`
 	Database struct {
