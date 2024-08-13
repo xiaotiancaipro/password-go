@@ -25,7 +25,7 @@ var log = utils.LoggerUtil{}.Logger()
 var fileUtil = utils.FileUtil{}
 
 func Config() (config ConfigYaml) {
-	configData := fileUtil.ReadFile("config/config.yaml")
+	configData := fileUtil.ReadFile("configs/config.yaml")
 	err := yaml.Unmarshal(configData, &config)
 	if err != nil {
 		log.Error(fmt.Sprintf("Error parsing config file: %v", err))
