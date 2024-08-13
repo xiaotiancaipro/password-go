@@ -11,7 +11,7 @@ type UserController struct{}
 
 func (u UserController) Login(c *gin.Context, db *gorm.DB) {
 
-	type input struct {
+	var input struct {
 		Email    string
 		Password string
 	}
@@ -22,44 +22,33 @@ func (u UserController) Login(c *gin.Context, db *gorm.DB) {
 	}
 
 	if userOperate.IsTableEmpty(db) {
-		message := "The table [user] is empty"
-		log.Info(message)
-		response.Success(c, message, output{0, 0})
+		response.Success(c, "The table [user] is empty", output{0, 0})
 		return
 	}
 
-	userInput := input{}
-	if err := c.ShouldBindJSON(&userInput); err != nil {
-		message := "Invalid input"
-		log.Error(message)
-		response.Error(c, message)
+	if err := c.ShouldBindJSON(&input); err != nil {
+		response.Error(c, "Invalid input")
 		return
 	}
 
 	userDB := models.User{}
-	if err := db.Where("email = ?", userInput.Email).First(&userDB).Error; err != nil {
-		message := fmt.Sprintf("This user [%s] is not exists", userInput.Email)
-		log.Info(message)
-		response.Success(c, message, output{0, 0})
+	if err := db.Where("email = ?", input.Email).First(&userDB).Error; err != nil {
+		response.Success(c, fmt.Sprintf("This user [%s] is not exists", input.Email), output{0, 0})
 		return
 	}
 
-	if userInput.Password != userDB.Password {
-		message := fmt.Sprintf("The user [%s] entered an incorrect password", userInput.Email)
-		log.Info(message)
-		response.Success(c, message, output{1, 0})
+	if input.Password != userDB.Password {
+		response.Success(c, fmt.Sprintf("The user [%s] entered an incorrect password", input.Email), output{1, 0})
 		return
 	}
 
-	message := "Login successful"
-	log.Info(message)
-	response.Success(c, message, output{1, 1})
+	response.Success(c, "Login successful", output{1, 1})
 
 }
 
 func (u UserController) CreateUser(c *gin.Context, db *gorm.DB) {
 
-	// input : models.User{}
+	var input = models.User{}
 
 	type output struct {
 		//  1 : The user create successfully
@@ -70,46 +59,33 @@ func (u UserController) CreateUser(c *gin.Context, db *gorm.DB) {
 		Status int
 	}
 
-	userInput := models.User{}
-	if err := c.ShouldBindJSON(&userInput); err != nil {
-		message := "Invalid input"
-		log.Error(message)
-		response.Error(c, message)
+	if err := c.ShouldBindJSON(&input); err != nil {
+		response.Error(c, "Invalid input")
 		return
 	}
 
-	if userInput.Email == "" || userInput.Password == "" {
-		message := "Email or Password is empty"
-		log.Info(message)
-		response.Success(c, message, output{-1})
+	if (input.Email == "") || (input.Password == "") {
+		response.Success(c, "Email or Password is empty", output{-1})
 		return
 	}
 
-	if !stringUtil.IsEmailValid(userInput.Email) {
-		message := fmt.Sprintf("The email [%s] is not valid", userInput.Email)
-		log.Info(message)
-		response.Success(c, message, output{-2})
+	if !stringUtil.IsEmailValid(input.Email) {
+		response.Success(c, fmt.Sprintf("The email [%s] is not valid", input.Email), output{-2})
 		return
 	}
 
 	userDB := models.User{}
-	if err := db.Where("email = ?", userInput.Email).First(&userDB).Error; err == nil {
-		message := fmt.Sprintf("This user [%s] is already exists", userInput.Email)
-		log.Info(message)
-		response.Success(c, message, output{-3})
+	if err := db.Where("email = ?", input.Email).First(&userDB).Error; err == nil {
+		response.Success(c, fmt.Sprintf("This user [%s] is already exists", input.Email), output{-3})
 		return
 	}
 
-	flag := userOperate.Create(db, &userInput)
+	flag := userOperate.Create(db, &input)
 	if !flag {
-		message := fmt.Sprintf("This user [%s] create failed", userInput.Email)
-		log.Warning(message)
-		response.Success(c, message, output{-4})
+		response.Warning(c, fmt.Sprintf("This user [%s] create failed", input.Email), output{-4})
 		return
 	}
 
-	message := fmt.Sprintf("This user [%s] create successfully", userInput.Email)
-	log.Info(message)
-	response.Success(c, message, output{1})
+	response.Success(c, fmt.Sprintf("This user [%s] create successfully", input.Email), output{1})
 
 }

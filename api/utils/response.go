@@ -16,10 +16,17 @@ func (r ResponseUtil) Unauthorized(c *gin.Context, message string) {
 	r.Build(c, http.StatusUnauthorized, "Error: "+message, nil)
 }
 
-func (r ResponseUtil) Success(c *gin.Context, message string, data any) {
+func (r ResponseUtil) Error(c *gin.Context, message string) {
+	log.Error(message)
+	r.Build(c, http.StatusBadRequest, "Error: "+message, nil) // 400
+}
+
+func (r ResponseUtil) Warning(c *gin.Context, message string, data any) {
+	log.Warning(message)
 	r.Build(c, http.StatusOK, "Success: "+message, data) // 200
 }
 
-func (r ResponseUtil) Error(c *gin.Context, message string) {
-	r.Build(c, http.StatusBadRequest, "Error: "+message, nil) // 400
+func (r ResponseUtil) Success(c *gin.Context, message string, data any) {
+	log.Info(message)
+	r.Build(c, http.StatusOK, "Success: "+message, data) // 200
 }
