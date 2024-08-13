@@ -19,21 +19,17 @@ func getIgnoreAuthPathMap() (pathMap map[string]types.Nil) {
 }
 
 func InitAuth(config configs.ConfigYaml) gin.HandlerFunc {
-
 	return func(c *gin.Context) {
-
 		if _, exists := getIgnoreAuthPathMap()[c.Request.URL.Path]; exists {
 			c.Next()
 			return
 		}
-
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			response.Unauthorized(c, "No Authorization header found")
 			c.Abort()
 			return
 		}
-
 		var scheme, token string
 		_, err := fmt.Sscanf(authHeader, "%s %s", &scheme, &token)
 		if (err != nil) || (scheme != "Bearer") || (token != config.SecretKey) {
@@ -41,10 +37,7 @@ func InitAuth(config configs.ConfigYaml) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
 		c.Next()
 		return
-
 	}
-
 }

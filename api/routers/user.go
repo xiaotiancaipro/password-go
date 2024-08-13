@@ -9,7 +9,7 @@ func UserRouter(r *gin.Engine) {
 	userController := controllers.UserController{}
 	user := r.Group("/user")
 	{
-		user.POST("login", userController.Login)
-		user.POST("create", userController.CreateUser)
+		user.POST("login", useDB(userController.Login))
+		user.POST("create", useDB(userController.CreateUser))
 	}
 }

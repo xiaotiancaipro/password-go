@@ -21,15 +21,15 @@ type ConfigYaml struct {
 	} `yaml:"database"`
 }
 
+var log = utils.LoggerUtil{}.Logger()
 var fileUtil = utils.FileUtil{}
 
-func Config() ConfigYaml {
-	var config ConfigYaml
+func Config() (config ConfigYaml) {
 	configData := fileUtil.ReadFile("config.yaml")
 	err := yaml.Unmarshal(configData, &config)
 	if err != nil {
-		fmt.Printf("Error parsing config file: %v\n", err)
+		log.Error(fmt.Sprintf("Error parsing config file: %v", err))
 		os.Exit(1)
 	}
-	return config
+	return
 }
