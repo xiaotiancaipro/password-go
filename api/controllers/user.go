@@ -16,6 +16,11 @@ func (u UserController) Login(c *gin.Context, db *gorm.DB) {
 		Password string
 	}
 
+	/**
+	[Exists: 0 & Login: 0]: User is not exists
+	[Exists: 1 & Login: 0]: The user password is incorrect
+	[Exists: 1 & Login: 1]: Login successful
+	*/
 	type output struct {
 		Exists int
 		Login  int
@@ -50,12 +55,14 @@ func (u UserController) CreateUser(c *gin.Context, db *gorm.DB) {
 
 	var input = models.User{}
 
+	/**
+	 1 : The user create successfully
+	-1 : Email or Password is empty
+	-2 : The email is invalid
+	-3 : This user is already exists
+	-4 : Retry, because the user create failed
+	*/
 	type output struct {
-		//  1 : The user create successfully
-		// -1 : Email or Password is empty
-		// -2 : The email is invalid
-		// -3 : This user is already exists
-		// -4 : Retry, because the user create failed
 		Status int
 	}
 
