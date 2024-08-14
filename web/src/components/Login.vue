@@ -14,39 +14,44 @@
 import {onMounted, onUnmounted, ref} from 'vue';
 import router from "@/router";
 import {ElMessage} from 'element-plus'
+import {APILogin} from "@/api/user";
 
 const username = ref("");
 const password = ref("");
-const isLoggedIn = ref(false);
-
-const getUsername = () => {
-  return "root";
-};
-
-const getPassword = () => {
-  return "root";
-};
-
-const setLoggedIn = (flag: boolean) => {
-  isLoggedIn.value = flag;
-};
 
 const login = () => {
-  if (username.value === getUsername() && password.value === getPassword()) {
-    localStorage.setItem("username", getUsername());
-    localStorage.setItem("password", getPassword());
-    setLoggedIn(true);
-    router.replace("/home");
-    ElMessage({
-      message: "Login successful",
-      type: "success",
-    })
-  } else {
-    ElMessage({
-      message: "Login failed, please enter your account and password correctly!",
-      type: "error",
-    });
-  }
+  APILogin(username.value, password.value).then(response => {
+
+    const code = response.code
+    const dataExists = response.data.Exists
+    const dataLogin = response.data.Login
+
+    if (code != 200) {
+      throw new Error("Code is not 200")
+    }
+
+    if ((dataExists === 0) && (dataLogin === 0)) {
+      ElMessage({message: "Please register first", type: "error"})
+      return
+    }
+
+    if ((dataExists === 1) && (dataLogin === 0)) {
+      ElMessage({message: "Please enter password correctly", type: "error"})
+      return
+    }
+
+    if ((dataExists === 1) && (dataLogin === 1)) {
+      router.replace("/home");
+      ElMessage({message: "Login successful", type: "success"})
+      return
+    }
+
+    throw new Error("Unknown status")
+
+  }).catch(error => {
+    ElMessage({message: "Internal Error", type: "error"})
+    console.log(error)
+  });
 };
 
 const keyDown = (e: KeyboardEvent): void => {

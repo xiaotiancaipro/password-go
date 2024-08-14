@@ -13,7 +13,10 @@
   "dependencies": {
     "vue": "^3.4.29",
     "vue-router": "^4.3.3",
-    "element-plus": "^2.7.8"
+    "element-plus": "^2.7.8",
+    "axios": "^1.5.1",
+    "vue-axios": "^3.5.2",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
